@@ -15,21 +15,6 @@ class CreateTSEDataset:
             self.scaler_dict[column] = MinMaxScaler(feature_range=(0, 1))
             self.scaler_dict[column].fit(data[column].values.reshape(-1, 1))   
             
-    def handle_zeros(self, method='ffill'):
-        """
-        Handle zeros in the data by replacing them with forward fill or backward fill
-        Args:
-            method: 'ffill' for forward fill, 'bfill' for backward fill
-        """
-        self.data = self.data.replace(0, np.nan)
-        if method == 'ffill':
-            self.data = self.data.fillna(method='ffill')
-        elif method == 'bfill':
-            self.data = self.data.fillna(method='bfill')
-        # If there are still NaN values at the beginning/end, fill them with the first/last non-NaN value
-        self.data = self.data.fillna(method='bfill').fillna(method='ffill')
-        return self.data
-
     def create_dataset(self, output_columns=None):    
         if output_columns is None:
             output_columns = ['close']
